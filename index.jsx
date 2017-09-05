@@ -13,8 +13,11 @@ import Obserable from './components/public/obserable';
 import ZmitiIndexApp from './index/index.jsx'
 import ZmitiChooseApp from './choose/index.jsx'
 import ZmitiChooseBorderApp from './chooseborder/index.jsx'
+import ZmitiInputApp from './input/index.jsx'
+import ZmitiResultApp from './result/index.jsx'
 
 var obserable = new Obserable();
+
 
 class App extends Component {
 	constructor(props) {
@@ -35,6 +38,8 @@ class App extends Component {
 			<ZmitiIndexApp {...data}></ZmitiIndexApp>
 			<ZmitiChooseApp {...data}></ZmitiChooseApp>
 			<ZmitiChooseBorderApp {...data}></ZmitiChooseBorderApp>
+			<ZmitiInputApp {...data}></ZmitiInputApp>
+			<ZmitiResultApp {...data}></ZmitiResultApp>
 
 		</div>
 	}

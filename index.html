@@ -20,7 +20,7 @@
 	  }
 	</style>
 </head>
-<body style="overflow: hidden;">
+<body style="overflow: hidden;background: url(./assets/images/bg1.jpg) no-repeat center;">
 		
 		<div id="fly-main-ui">
 		</div>
@@ -34,7 +34,10 @@
 			
 			window.PointerEvent = undefined;
 			function onError(){
-				window.PointerEvent = void 0;
+				
+				
+
+
 				var script  = document.createElement('script');
 				script.src = './assets/js/index.js?aa='+new Date().getTime();
 				document.body.appendChild(script);
@@ -44,20 +47,21 @@
 			var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
 
 			window.baseUrl='http://api.zmiti.com/v2/';
-			window.companyid ='8e90b777-7f68-c648-1350-59040c9d81df';
-			window.ajaxType = 'POST';
+			
 			
 			window.showCover = true;
 
 		</script>
 
 		<!--
+			
 			<script src='./assets/js/vendor.js'></script>
-		
 			<script src='./assets/js/index.js'></script>
 		-->
+		
+		<script src='http://localhost:4004/index.js' onError='onError()'></script>
 
-		<script src='http://localhost:4004/index.js'></script>
+		
 	
 </body>
 </html>

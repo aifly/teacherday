@@ -31,13 +31,14 @@
   -webkit-box-orient: vertical; }
   .zmiti-chooseborder-main-ui.active {
     -webkit-transform: translate(0, 0) scale(1);
-    transform: translate(0, 0) scale(1); }
+    transform: translate(0, 0) scale(1);
+    z-index: 100; }
   .zmiti-chooseborder-main-ui.left {
-    -webkit-transform: translate(-50%, 0) scale(1);
-    transform: translate(-50%, 0) scale(1); }
+    -webkit-transform: translate(-100%, 0) scale(0.8);
+    transform: translate(-100%, 0) scale(0.8); }
   .zmiti-chooseborder-main-ui.right {
-    -webkit-transform: translate(50%, 0) scale(1);
-    transform: translate(50%, 0) scale(1); }
+    -webkit-transform: translate(100%, 0) scale(0.8);
+    transform: translate(100%, 0) scale(0.8); }
   .zmiti-chooseborder-main-ui .zmiti-chooseborder-main-content {
     width: 9.9rem; }
     .zmiti-chooseborder-main-ui .zmiti-chooseborder-main-content ul {
@@ -49,7 +50,13 @@
         box-sizing: border-box;
         position: relative; }
         .zmiti-chooseborder-main-ui .zmiti-chooseborder-main-content ul li img {
-          position: relative; }
+          position: relative;
+          z-index: 1; }
+        .zmiti-chooseborder-main-ui .zmiti-chooseborder-main-content ul li .zmiti-file {
+          position: absolute;
+          left: 0;
+          top: 0;
+          z-index: 0; }
         .zmiti-chooseborder-main-ui .zmiti-chooseborder-main-content ul li .zmiti-border-active {
           position: absolute;
           z-index: 0;
@@ -69,7 +76,7 @@
       -webkit-box-align: center;
       -webkit-box-pack: center;
       -webkit-box-orient: horizontal;
-      width: 8rem;
+      width: 4rem;
       margin: 1rem auto; }
       .zmiti-chooseborder-main-ui .zmiti-chooseborder-main-content .zmiti-btn-groups > aside {
         -webkit-box-flex: 1;

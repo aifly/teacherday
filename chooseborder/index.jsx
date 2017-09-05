@@ -15,6 +15,7 @@ class ZmitiChooseBorderApp extends Component {
     super(props);
 
     this.state = {
+      className: 'right',
       borderList: [{
         src: './assets/images/border1.png'
       }, {
@@ -24,6 +25,7 @@ class ZmitiChooseBorderApp extends Component {
       }, {
         src: './assets/images/border4.png'
       }],
+      file: '',
       currentBorderIndex: 0
     }
     this.viewW = document.documentElement.clientWidth;
@@ -36,7 +38,8 @@ class ZmitiChooseBorderApp extends Component {
       backgroundSize: 'cover'
     };
 
-    return <div className='zmiti-chooseborder-main-ui' style={mainStyle}>
+
+    return <div className={'zmiti-chooseborder-main-ui '+ this.state.className} style={mainStyle}>
       <div className='zmiti-chooseborder-main-content'>
         <ul>
           {
@@ -44,13 +47,14 @@ class ZmitiChooseBorderApp extends Component {
               return <li key={i} onClick={this.chooseBorder.bind(this,i)}>
                   {this.state.currentBorderIndex === i && <img className='zmiti-border-active' src='./assets/images/border-active.png'/>}
                   <img src={border.src}/>
+                  {this.state.file&&<img src={this.state.file} className='zmiti-file'/>}
               </li>
             })  
           }
         </ul>
         <div className='zmiti-btn-groups'>
-           <aside ><img src='./assets/images/preview.png'/></aside>
-           <aside><img src='./assets/images/next.png'/></aside>
+           <aside hidden onClick={this.preview.bind(this)}><img src='./assets/images/preview.png'/></aside>
+           <aside onClick={this.next.bind(this)}><img src='./assets/images/next.png'/></aside>
         </div>
       </div>
     </div>
@@ -58,11 +62,41 @@ class ZmitiChooseBorderApp extends Component {
   }
 
 
+  preview() {
+    var {
+      obserable
+    } = this.props;
+
+    obserable.trigger({
+      type: 'toggleChooseBorder',
+      data: 'right'
+    });
+    obserable.trigger({
+      type: 'toggleChoose',
+      data: 'active'
+    });
+  }
+
+  next() {
+    var {
+      obserable
+    } = this.props;
+    obserable.trigger({
+      type: 'toggleChooseBorder',
+      data: 'left'
+    });
+    obserable.trigger({
+      type: 'toggleInput',
+      data: 'active'
+    });
+
+  }
+
 
   chooseBorder(i) {
     this.setState({
       currentBorderIndex: i
-    })
+    });
   }
 
 
@@ -80,7 +114,26 @@ class ZmitiChooseBorderApp extends Component {
   }
 
 
-  componentDidMount() {}
+  componentDidMount() {
+    var {
+      obserable
+    } = this.props;
+
+    this.setState({
+      file: obserable.trigger({
+        type: "getFile"
+      })
+    })
+    obserable.on('toggleChooseBorder', (e) => {
+      this.setState({
+        className: e
+      })
+    })
+
+    obserable.on('getBorder', () => {
+      return this.state.borderList[this.state.currentBorderIndex];
+    })
+  }
 
 
 }

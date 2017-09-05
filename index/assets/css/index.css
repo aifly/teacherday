@@ -20,16 +20,16 @@
 .zmiti-index-main-ui {
   width: 100%;
   height: 100%;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
   left: 0;
   top: 0; }
   .zmiti-index-main-ui.active {
     -webkit-transform: translate(0, 0) scale(1);
     transform: translate(0, 0) scale(1); }
   .zmiti-index-main-ui.left {
-    -webkit-transform: translate(-50%, 0) scale(1);
-    transform: translate(-50%, 0) scale(1); }
+    -webkit-transform: translate(-100%, 0) scale(0.8);
+    transform: translate(-100%, 0) scale(0.8); }
   .zmiti-index-main-ui .zmiti-logo {
     width: 2rem;
     position: absolute;

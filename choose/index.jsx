@@ -15,7 +15,10 @@ class ZmitiChooseApp extends Component {
     super(props);
 
     this.state = {
-      fileVal: ''
+      fileVal: 'http://api.zmiti.com/zmiti_ele/public/20170905/13d5f5b828dfc697fced7b7b1baf3458.png',
+      className: 'active',
+      border: ''
+
     }
     this.viewW = document.documentElement.clientWidth;
     this.viewH = document.documentElement.clientHeight;
@@ -26,12 +29,14 @@ class ZmitiChooseApp extends Component {
       background: 'url(./assets/images/bg1.jpg) no-repeat center center ',
       backgroundSize: 'cover'
     };
-
-    return <div className={'zmiti-choose-main-ui left'} style={mainStyle}>
+    var rem = this.viewW / 10;
+    return <div className={'zmiti-choose-main-ui '+this.state.className} style={mainStyle}>
       <div className='zmiti-choose-main-content'>
         <div className='zmiti-upload'>
           <img  src={this.state.fileVal||'./assets/images/upload.png'}/>
+          <canvas ref='canvas' width={6*rem}  height={6*rem}></canvas>
           <input ref='upload-file' onChange={this.chooseImg.bind(this)} type='file'/>
+
           {this.state.showUploadLoading&&<span className='zmiti-upload-loading'>上传中,请稍候...</span>}
         </div>
         <div className='zmiti-beign-upload' >
@@ -40,25 +45,49 @@ class ZmitiChooseApp extends Component {
         </div>
         <div className='zmiti-btn-groups'>
             <aside onClick={this.rechoose.bind(this)}><img src='./assets/images/rechoose.png'/></aside>
-            <aside><img src='./assets/images/next.png'/></aside>
+            <aside onClick={this.next.bind(this)}><img src='./assets/images/next.png'/></aside>
         </div>
       </div>
     </div>
 
   }
 
+
+  next() {
+    var {
+      obserable
+    } = this.props;
+
+    obserable.trigger({
+      type: 'toggleChooseBorder',
+      data: 'active'
+    });
+    obserable.trigger({
+      type: 'toggleChoose',
+      data: 'left'
+    });
+  }
+
   rechoose() {
     //重新选择图片
     this.setState({
       fileVal: ''
-    })
+    }, () => {
+      this.drawImage();
+    });
+
   }
 
   chooseImg(e) {
+    console.log(e.target.value);
+    if (!e.target.value) {
+      return;
+    }
     var formData = new FormData();
     this.setState({
       showUploadLoading: true
     })
+
     formData.append('setupfile', this.refs['upload-file'].files[0]);
     formData.append('uploadtype', 1);
     $.ajax({
@@ -72,11 +101,19 @@ class ZmitiChooseApp extends Component {
       if (data.getret === 0) {
         var img = new Image();
         img.onload = () => {
-
+          var {
+            obserable
+          } = this.props;
           this.setState({
             fileVal: data.getfileurl[0].datainfourl,
-            showUploadLoading: false
-          })
+            showUploadLoading: false,
+            border: obserable.trigger({
+              type: 'getBorder'
+            }).src
+          }, () => {
+            this.drawImage()
+          });
+
         }
         img.src = data.getfileurl[0].datainfourl
       }
@@ -99,7 +136,38 @@ class ZmitiChooseApp extends Component {
   }
 
 
-  componentDidMount() {}
+  drawImage() {
+
+
+  }
+
+
+  componentDidMount() {
+    var {
+      obserable
+    } = this.props;
+
+
+    obserable.on('toggleChoose', (e) => {
+      if (e === 'active') {
+        var canvas = this.refs['canvas'];
+        var context = canvas.getContext('2d');
+        var img = new Image();
+        img.onload = function() {
+          context.globalCompositeOperation = 'destination-atop';
+          context.drawImage(this, 0, 0, canvas.width, canvas.height);
+        }
+        img.src = this.state.border;
+      }
+      this.setState({
+        className: e
+      })
+    });
+
+    obserable.on('getFile', () => {
+      return this.state.fileVal
+    })
+  }
 
 
 }
