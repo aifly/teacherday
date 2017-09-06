@@ -8,15 +8,15 @@ import {
   PubCom
 } from '../components/public/pub.jsx';
 
-
+import ZmitiToastApp from '../components/toast/index.jsx'
 
 class ZmitiChooseApp extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      fileVal: 'http://api.zmiti.com/zmiti_ele/public/20170905/13d5f5b828dfc697fced7b7b1baf3458.png',
-      className: 'active',
+      fileVal: '', //http://api.zmiti.com/zmiti_ele/public/20170905/13d5f5b828dfc697fced7b7b1baf3458.png',
+      className: 'right',
       border: ''
 
     }
@@ -48,12 +48,17 @@ class ZmitiChooseApp extends Component {
             <aside onClick={this.next.bind(this)}><img src='./assets/images/next.png'/></aside>
         </div>
       </div>
+      {this.state.toast && <ZmitiToastApp toast={this.state.toast}></ZmitiToastApp>}
     </div>
 
   }
 
 
   next() {
+    if (!this.state.fileVal) {
+      this.showToast('请上传一张图片');
+      return;
+    }
     var {
       obserable
     } = this.props;
@@ -97,7 +102,6 @@ class ZmitiChooseApp extends Component {
       url: 'http://api.zmiti.com/v2/share/upload_file/',
       data: formData
     }).done((data) => {
-      console.log(data);
       if (data.getret === 0) {
         var img = new Image();
         img.onload = () => {
@@ -107,9 +111,7 @@ class ZmitiChooseApp extends Component {
           this.setState({
             fileVal: data.getfileurl[0].datainfourl,
             showUploadLoading: false,
-            border: obserable.trigger({
-              type: 'getBorder'
-            }).src
+
           }, () => {
             this.drawImage()
           });
@@ -167,6 +169,8 @@ class ZmitiChooseApp extends Component {
     obserable.on('getFile', () => {
       return this.state.fileVal
     })
+
+
   }
 
 

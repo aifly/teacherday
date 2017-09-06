@@ -38,10 +38,10 @@ class ZmitiInputApp extends Component {
     return <div className={'zmiti-input-main-ui '+ this.state.className} style={mainStyle}>
       <div className='zmiti-input-main-content'>
         <div className='zmiti-input-C' style={inputStyle}>
-          <textarea value={this.state.words} onChange={this.onChange.bind(this)}></textarea>
+          <textarea value={this.state.wish} onChange={this.onChange.bind(this)}></textarea>
         </div>
         <div className='zmiti-btn-group'>
-          <aside>
+          <aside onClick={this.next.bind(this)}>
             <img src='./assets/images/next.png'/>
           </aside>
         </div>
@@ -58,8 +58,35 @@ class ZmitiInputApp extends Component {
       return;
     }
     this.setState({
-      words: e.target.value
+      wish: e.target.value
+    });
+  }
+
+  next() {
+    if (!this.state.wish) {
+      this.showToast('祝福文字不能为空')
+      return;
+    }
+    var {
+      obserable
+    } = this.props;
+    obserable.trigger({
+      type: 'toggleInput',
+      data: 'left'
+    });
+
+
+
+    obserable.on('getWish', () => {
+
+      return this.state.wish;
+    });
+
+    obserable.trigger({
+      type: 'toggleResult',
+      data: 'active'
     })
+
   }
 
 

@@ -23,30 +23,36 @@
   .zmiti-result-main-content {
     width: 10rem;
 
-    .zmiti-result-C {
-      height: 4.5rem;
-      width: 8rem;
-      margin: 1rem auto 5rem;
+    .zmiti-result-img {
       @include pos(r);
+      width: 8rem;
+      margin: 0 auto;
+      height: 5rem;
+      overflow: hidden;
 
-      textarea {
+      img {
         @include pos(a);
+        left: 0;
+        top: 0;
+      }
+    }
+    .zmiti-wish-C {
+      width: 8rem;
+      height: 5rem;
+      margin: 1rem auto;
+
+      div {
+        line-height: 1.1rem;
         width: 70%;
-        height: 80%;
-        left: 15%;
-        top: 10%;
-        font-size: .5rem;
-        //border: none;
-        overflow: hidden;
-        border: none;
-        line-height: 1rem;
-        resize: none;
-        background: transparent;
+        text-indent: 2em;
+        margin: 0 auto;
+        @include pos(r);
+        top: .6rem;
       }
     }
     .zmiti-btn-group {
       @include displayBox(horizontal);
-      width: 4rem;
+      width: 8rem;
       margin: 1rem auto;
 
       &>aside {
@@ -54,5 +60,8 @@
         margin: 0 10px;
       }
     }
+  }
+  .zmiti-mask {
+    z-index: 1000;
   }
 }

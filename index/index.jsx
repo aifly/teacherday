@@ -18,7 +18,7 @@ class ZmitiIndexApp extends Component {
 
 
     this.state = {
-
+      className: 'active'
 
     }
     this.viewW = document.documentElement.clientWidth;
@@ -32,7 +32,7 @@ class ZmitiIndexApp extends Component {
       backgroundSize: 'cover'
     };
 
-    return <div className='zmiti-index-main-ui left' style={mainStyle}>
+    return <div className={'zmiti-index-main-ui '+this.state.className} style={mainStyle}>
         <img src='./assets/images/logo.png' className='zmiti-logo'/>
         <div className='zmiti-img-C'>
           <img src='./assets/images/img1.png' className='zmiti-img1'/>
@@ -42,11 +42,26 @@ class ZmitiIndexApp extends Component {
         <img src='./assets/images/flower.png' className='zmiti-flower'/>
 
         <img src='./assets/images/text.png' className='zmiti-text'/>
-        <img src='./assets/images/begindo.png' className='zmiti-begindo'/>
+        <img onClick={this.next.bind(this)} src='./assets/images/begindo.png' className='zmiti-begindo'/>
     </div>
 
   }
 
+  next() {
+    var {
+      obserable
+    } = this.props;
+    obserable.trigger({
+      type: 'toggleIndex',
+      data: 'left'
+    });
+
+    obserable.trigger({
+      type: "toggleChoose",
+      data: 'active'
+    })
+
+  }
 
 
   showToast(msg) {
@@ -64,7 +79,15 @@ class ZmitiIndexApp extends Component {
 
 
   componentDidMount() {
+    var {
+      obserable
+    } = this.props;
 
+    obserable.on('toggleIndex', e => {
+      this.setState({
+        className: e
+      })
+    })
   }
 
 }

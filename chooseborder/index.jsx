@@ -119,20 +119,22 @@ class ZmitiChooseBorderApp extends Component {
       obserable
     } = this.props;
 
-    this.setState({
-      file: obserable.trigger({
-        type: "getFile"
-      })
-    })
+
     obserable.on('toggleChooseBorder', (e) => {
       this.setState({
-        className: e
+        className: e,
+        file: obserable.trigger({
+          type: "getFile"
+        })
+      });
+
+      obserable.on('getBorder', () => {
+        return this.state.borderList[this.state.currentBorderIndex];
       })
+
     })
 
-    obserable.on('getBorder', () => {
-      return this.state.borderList[this.state.currentBorderIndex];
-    })
+
   }
 
 
