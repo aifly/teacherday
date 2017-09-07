@@ -18,6 +18,7 @@ class ZmitiInputApp extends Component {
 
     this.state = {
       className: 'right',
+      wish: ''
 
     }
     this.viewW = document.documentElement.clientWidth;

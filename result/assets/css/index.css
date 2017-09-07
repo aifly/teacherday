@@ -43,10 +43,16 @@
     width: 10rem; }
     .zmiti-result-main-ui .zmiti-result-main-content .zmiti-result-img {
       position: relative;
-      width: 8rem;
+      width: 5rem;
       margin: 0 auto;
       height: 5rem;
       overflow: hidden; }
+      .zmiti-result-main-ui .zmiti-result-main-content .zmiti-result-img > div {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0; }
       .zmiti-result-main-ui .zmiti-result-main-content .zmiti-result-img img {
         position: absolute;
         left: 0;

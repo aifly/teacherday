@@ -39,17 +39,26 @@ class App extends Component {
 
 		var data = {
 			obserable,
-			wxConfig: this.wxConfig,
-			changeURLPar: this.changeURLPar,
+			wxConfig: this.wxConfig.bind(this),
+			changeURLPar: this.changeURLPar.bind(this),
 			nickname: this.state.nickname
 		}
+		var isExist = this.state.border && this.state.file && this.state.wish;
+
+		var data1 = {
+			border: this.state.border,
+			file: this.state.file,
+			wish: this.state.wish
+		}
+
 		return <div className='zmiti-main-ui'>
 
-			<ZmitiIndexApp {...data}></ZmitiIndexApp>
-			<ZmitiChooseApp {...data}></ZmitiChooseApp>
-			<ZmitiChooseBorderApp {...data}></ZmitiChooseBorderApp>
-			<ZmitiInputApp {...data}></ZmitiInputApp>
-			<ZmitiResultApp {...data}></ZmitiResultApp>
+			{!isExist&&<ZmitiIndexApp {...data}></ZmitiIndexApp>}
+			{!isExist&&<ZmitiChooseApp {...data}></ZmitiChooseApp>}
+			{!isExist&&<ZmitiChooseBorderApp {...data}></ZmitiChooseBorderApp>}
+			{!isExist&&<ZmitiInputApp {...data}></ZmitiInputApp>}
+			{!isExist&&<ZmitiResultApp {...data}></ZmitiResultApp>}
+			{isExist&&<ZmitiResultApp {...data1} {...data}></ZmitiResultApp>}
 
 		</div>
 	}
@@ -61,8 +70,6 @@ class App extends Component {
 
 
 		var code_durl = encodeURIComponent(durl);
-
-
 
 		$.ajax({
 			type: 'get',
@@ -168,26 +175,29 @@ class App extends Component {
 					s.nickname = dt.userinfo.nickname;
 					s.headimgurl = dt.userinfo.headimgurl;
 
-					s.wxConfig(s.nickname + '的最美笑脸和祝福送老师！', 'XX的最美笑脸和祝福送老师！', 'http://h5.zmiti.com/public/teacherday/assets/images/300.jpg');
+					// s.wxConfig(window.share.title.replace(/{nickname}/, s.nickname), window.share.desc.replace(/{nickname}/, s.nickname), 'http://h5.zmiti.com/public/teacherday/assets/images/300.jpg');
 					s.state.nickname = s.nickname;
+					window.nickname = s.nickname;
 					s.forceUpdate();
 
 				} else {
 					if (s.isWeiXin()) {
-						var nickname = s.getQueryString('data');
+						var file = s.getQueryString('file');
+						var border = s.getQueryString('border');
+						var wish = s.getQueryString('wish');
 
 						var redirect_uri = window.location.href.split('?')[0];
 
 						var symbol = redirect_uri.indexOf('?') > -1 ? '&' : '?';
-						if (nickname) {
-							redirect_uri = s.changeURLPar(redirect_uri, 'data', (nickname));
+						if (file) {
+							redirect_uri = s.changeURLPar(redirect_uri, 'file', (file));
+							redirect_uri = s.changeURLPar(redirect_uri, 'border', (border));
+							redirect_uri = s.changeURLPar(redirect_uri, 'wish', (wish));
 						}
 
 						//url = s.changeURLPar(url, 'nickname', 'zmiti');
 
-						s.log({
-							aa: redirect_uri
-						})
+
 						$.ajax({
 							url: 'http://api.zmiti.com/v2/weixin/getoauthurl/',
 							type: 'post',
@@ -215,6 +225,18 @@ class App extends Component {
 		return url.match(pattern) ? url.replace(eval('/(' + arg + '=)([^&]*)/gi'), replaceText) : (url.match('[\?]') ? url + '&' + replaceText : url + '?' + replaceText);
 	}
 	componentDidMount() {
+		var s = this;
+		var file = s.getQueryString('file');
+		var border = s.getQueryString('border');
+		var wish = s.getQueryString('wish');
+		if (file && border && wish) {
+			this.setState({
+				file,
+				border,
+				wish
+			});
+		}
+		this.wxConfig(document.title, document.title, 'http://h5.zmiti.com/public/teacherday/assets/images/300.jpg');
 		this.getOauthurl();
 	}
 	isWeiXin() {

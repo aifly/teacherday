@@ -9,7 +9,10 @@ import {
 } from '../components/public/pub.jsx';
 
 
-
+var data = {
+  wxappid: 'wxec2401ee9a70f3d9',
+  wxappsecret: 'fc2c8e7c243da9e8898516fa5da8cbbb'
+}
 class ZmitiResultApp extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +24,12 @@ class ZmitiResultApp extends Component {
     this.viewW = document.documentElement.clientWidth;
     this.viewH = document.documentElement.clientHeight;
 
+  }
+  getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return (r[2]);
+    return null;
   }
   render() {
     var mainStyle = {
@@ -37,9 +46,14 @@ class ZmitiResultApp extends Component {
     var resultBg = {
 
     }
+    var resultBg1 = {}
     if (this.state.border && this.state.file) {
-      resultBg.background = 'url(' + this.state.border + ') no-repeat center,url(' + this.state.file + ') no-repeat center',
-        resultBg.backgroundSize = 'contain'
+      resultBg.background = 'url(' + this.state.file + ') no-repeat center',
+        resultBg.backgroundSize = 'cover'
+      resultBg1.background = 'url(' + this.state.border + ') no-repeat center',
+        resultBg1.backgroundSize = 'contain'
+
+
     }
 
     var maskStyle = {
@@ -47,22 +61,34 @@ class ZmitiResultApp extends Component {
       backgroundSize: 'cover'
     }
 
+    var s = this;
+    var file = s.getQueryString('file');
+    var border = s.getQueryString('border');
+    var wish = s.getQueryString('wish');
+    var isExisit = file && border && wish;
+
     return <div className={'zmiti-result-main-ui '+ this.state.className} style={mainStyle}>
       <div className='zmiti-result-main-content'>
         <div className='zmiti-result-img' style={resultBg}>
-          
+           <div style={resultBg1}></div>
         </div>
         <div className='zmiti-wish-C' style={wishStyle}>
             <div>{this.state.wish}</div>
         </div>
-        <div className='zmiti-btn-group'>
-          <aside onClick={this.reInput.bind(this)}>
-            <img src='./assets/images/reinput.png'/>
-          </aside>
-           <aside onClick={()=>{this.setState({showMask:true})}}>
-            <img src='./assets/images/done.png'/>
-          </aside>
-        </div>
+    {
+      !isExisit && <div className='zmiti-btn-group'>
+                  <aside onClick={this.reInput.bind(this)}>
+                    <img src='./assets/images/reinput.png'/>
+                  </aside>
+                   <aside onClick={()=>{this.setState({showMask:true})}}>
+                     <img src='./assets/images/done.png'/>
+                   </aside>
+                </div>}
+        {isExisit && <div className='zmiti-btn-group' style={{width:'4rem'}}>
+                     <aside>
+                        <a href={window.href||'http://h5.zmiti.com/public/teacherday/'}><img src='./assets/images/begindo.png'/></a>
+                      </aside>
+                </div>}
       </div>
 
       {this.state.showMask&&<div  onTouchStart={()=>{this.setState({showMask:false})}} className='zmiti-mask lt-full' style={maskStyle}></div>}
@@ -107,9 +133,23 @@ class ZmitiResultApp extends Component {
     var {
       obserable,
       wxConfig,
+      log,
       nickname,
-      changeURLPar
+      changeURLPar,
+      border,
+      file,
+      wish
+
     } = this.props;
+
+    if (border && file && wish) {
+      this.setState({
+        className: "active",
+        wish: decodeURI(wish),
+        border,
+        file
+      });
+    }
     obserable.on('toggleResult', e => {
       this.setState({
         className: e,
@@ -123,21 +163,51 @@ class ZmitiResultApp extends Component {
       if (e === 'active') {
 
         var url = window.location.href;
-        url = changeURLPar(url, 'data', JSON.stringify({
+        var params = JSON.stringify({
           file: obserable.trigger({
             type: 'getFile'
           }),
           border: obserable.trigger({
             type: 'getBorder'
-          }),
-          wish: obserable.trigger({
-            type: 'getWish'
-          })
+          }).src
+        })
+
+        url = changeURLPar(url, 'file', obserable.trigger({
+          type: 'getFile'
         }));
-        wxConfig(nickname + '的最美笑脸和祝福送老师！', 'XX的最美笑脸和祝福送老师！', 'http://h5.zmiti.com/public/teacherday/assets/images/300.jpg', url);
+        url = changeURLPar(url, 'border', obserable.trigger({
+          type: 'getBorder'
+        }).src);
+
+        url = changeURLPar(url, 'wish', encodeURI(obserable.trigger({
+          type: 'getWish'
+        })));
+        setTimeout(() => {
+          url = url.split('#')[0];
+          wxConfig(window.share.title.replace(/{nickname}/, window.nickname), window.share.desc, 'http://h5.zmiti.com/public/teacherday/assets/images/300.jpg', url);
+        }, 1000)
+
       }
 
     });
+  }
+  changeURLPar(url, arg, val) {
+    var pattern = arg + '=([^&]*)';
+    var replaceText = arg + '=' + val;
+    return url.match(pattern) ? url.replace(eval('/(' + arg + '=)([^&]*)/gi'), replaceText) : (url.match('[\?]') ? url + '&' + replaceText : url + '?' + replaceText);
+  }
+
+
+  log(opt) {
+
+    $.ajax({
+      url: 'http://api.zmiti.com/v2/msg/send_msg',
+      data: {
+        type: opt.key || 'log',
+        content: JSON.stringify(opt),
+        to: ''
+      }
+    })
   }
 
   getAssets() {

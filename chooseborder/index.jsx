@@ -38,16 +38,23 @@ class ZmitiChooseBorderApp extends Component {
       backgroundSize: 'cover'
     };
 
+    var borderStyle = {
+
+    }
+    if (this.state.file) {
+      borderStyle.background = 'url(' + this.state.file + ') no-repeat center center',
+        borderStyle.backgroundSize = 'cover'
+    }
+
 
     return <div className={'zmiti-chooseborder-main-ui '+ this.state.className} style={mainStyle}>
       <div className='zmiti-chooseborder-main-content'>
         <ul>
           {
             this.state.borderList.map((border,i)=>{
-              return <li key={i} onClick={this.chooseBorder.bind(this,i)}>
+              return <li style={borderStyle} key={i} onClick={this.chooseBorder.bind(this,i)}>
                   {this.state.currentBorderIndex === i && <img className='zmiti-border-active' src='./assets/images/border-active.png'/>}
                   <img src={border.src}/>
-                  {this.state.file&&<img src={this.state.file} className='zmiti-file'/>}
               </li>
             })  
           }

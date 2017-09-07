@@ -15,7 +15,7 @@ class ZmitiChooseApp extends Component {
     super(props);
 
     this.state = {
-      fileVal: '', //http://api.zmiti.com/zmiti_ele/public/20170905/13d5f5b828dfc697fced7b7b1baf3458.png',
+      fileVal: '', //./assets/images/1.jpg'http://api.zmiti.com/zmiti_ele/public/20170905/13d5f5b828dfc697fced7b7b1baf3458.png',
       className: 'right',
       border: ''
 
@@ -84,7 +84,6 @@ class ZmitiChooseApp extends Component {
   }
 
   chooseImg(e) {
-    console.log(e.target.value);
     if (!e.target.value) {
       return;
     }

@@ -38,6 +38,8 @@ class ZmitiIndexApp extends Component {
           <img src='./assets/images/img1.png' className='zmiti-img1'/>
           <img src='./assets/images/img2.png' className='zmiti-img2'/>
           <img src='./assets/images/img3.png' className='zmiti-img3'/>
+          <img src='./assets/images/img4.png' className='zmiti-img4'/>
+          <img src='./assets/images/img5.png' className='zmiti-img5'/>
         </div>
         <img src='./assets/images/flower.png' className='zmiti-flower'/>
 
