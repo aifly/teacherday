@@ -19,7 +19,9 @@ class ZmitiResultApp extends Component {
 
     this.state = {
       className: 'right',
-      wish: ''
+      wish: '',
+      transX: 0,
+      transY: 0
     }
     this.viewW = document.documentElement.clientWidth;
     this.viewH = document.documentElement.clientHeight;
@@ -67,9 +69,21 @@ class ZmitiResultApp extends Component {
     var wish = s.getQueryString('wish');
     var isExisit = file && border && wish;
 
+
+    var uploadStyle = {}
+    if (this.state.file) {
+      uploadStyle.background = 'url(' + this.state.file + ') no-repeat';
+      uploadStyle.backgroundSize = 'cover';
+      uploadStyle.backgroundPosition = this.state.transX + 'px ' + this.state.transY + 'px';
+    }
+
     return <div className={'zmiti-result-main-ui '+ this.state.className} style={mainStyle}>
       <div className='zmiti-result-main-content'>
-        <div className='zmiti-result-img' style={resultBg}>
+        <div className='zmiti-result-img'>
+    <div className='zmiti-file-img' style={uploadStyle}>
+
+          </div>
+          {this.state.file&&<img hidden style={{WebkitTransform:'translate('+this.state.transX+'px,'+this.state.transY+'px)'}} src={this.state.file}/>}
            <div style={resultBg1}></div>
         </div>
         <div className='zmiti-wish-C' style={wishStyle}>
@@ -86,7 +100,7 @@ class ZmitiResultApp extends Component {
                 </div>}
         {isExisit && <div className='zmiti-btn-group' style={{width:'4rem'}}>
                      <aside>
-                        <a href={window.href||'http://h5.zmiti.com/public/teacherday/'}><img src='./assets/images/begindo.png'/></a>
+                        <a href={window.href||'http://h5.zmiti.com/public/teacherday/'}><img src='./assets/images/do.png'/></a>
                       </aside>
                 </div>}
       </div>
@@ -138,7 +152,9 @@ class ZmitiResultApp extends Component {
       changeURLPar,
       border,
       file,
-      wish
+      wish,
+      transX,
+      transY
 
     } = this.props;
 
@@ -147,9 +163,17 @@ class ZmitiResultApp extends Component {
         className: "active",
         wish: decodeURI(wish),
         border,
-        file
+        file,
+        transX,
+        transY
       });
     }
+    obserable.on('fixedResultPos', (data) => {
+      this.setState({
+        transX: data.transX,
+        transY: data.transY
+      })
+    })
     obserable.on('toggleResult', e => {
       this.setState({
         className: e,
@@ -182,6 +206,8 @@ class ZmitiResultApp extends Component {
         url = changeURLPar(url, 'wish', encodeURI(obserable.trigger({
           type: 'getWish'
         })));
+        url = changeURLPar(url, 'transX', this.state.transX);
+        url = changeURLPar(url, 'transY', this.state.transY);
         setTimeout(() => {
           url = url.split('#')[0];
           wxConfig(window.share.title.replace(/{nickname}/, window.nickname), window.share.desc, 'http://h5.zmiti.com/public/teacherday/assets/images/300.jpg', url);

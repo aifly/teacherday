@@ -32,7 +32,7 @@
 <body style="overflow: hidden;background: url(./assets/images/bg1.jpg) no-repeat center;">
 		<div class="zmiti-play" id='zmiti-play'>
 			<img src='./assets/images/music.png'/>
-			<audio id="audio" src='./assets/music/bg.mp3' ></audio>
+			<audio autoplay="autoplay" id="audio" src='./assets/music/bg.mp3' ></audio>
 		</div>
 		<div id="fly-main-ui">
 		</div>
@@ -46,12 +46,15 @@
 		<script type="text/javascript">
 
 			var share = {
-				title:'{nickname}的最美笑脸和祝福送老师！',
-				desc:'晒出你的盛世美颜，说出你的真心话！'
+				title:'{nickname}送给老师一份”礼物“，快来看看吧',
+				desc:'晒出你的盛世美颜，送上最诚挚的祝福！'
 			}
-			href = 'http://h5.zmiti.com/public/teacherday1';
+			href = 'http://h5.zmiti.com/public/teacherday';
 			var play = document.getElementById('zmiti-play');
 			var audio = document.getElementById('audio');
+			if(!audio.paused){
+				play.classList.add('play');
+			}
 			audio.addEventListener('play',function(){
 				play.classList.add('play');
 			});

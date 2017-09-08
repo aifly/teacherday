@@ -17,7 +17,7 @@
     @include animation(opacity 2s $delay linear forwards);
   }
   @mixin rotate($delay) {
-    @include animation(rotate1 .8s $delay*1.5 linear forwards);
+    @include animation(opacity 2s $delay linear forwards);
   }
   $time: 800ms;
 
@@ -110,7 +110,7 @@
 }
 @-webkit-keyframes rotate1 {
   from {
-    @include transform(translate3d(-200px, 0, 0) rotate(1680deg));
+    @include transform(translate3d(0, -440px, 0));
   }
   to {
     opacity: 1;

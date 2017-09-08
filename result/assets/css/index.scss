@@ -25,9 +25,9 @@
 
     .zmiti-result-img {
       @include pos(r);
-      width: 5rem;
+      width: 7rem;
       margin: 0 auto;
-      height: 5rem;
+      height: 7rem;
       overflow: hidden;
 
       &>div {
@@ -37,6 +37,8 @@
         left: 0;
         top: 0;
       }
+      .zmiti-file-img {
+      }
       img {
         @include pos(a);
         left: 0;
@@ -44,23 +46,23 @@
       }
     }
     .zmiti-wish-C {
-      width: 8rem;
-      height: 5rem;
-      margin: 1rem auto;
+      width: 7rem;
+      height: 4rem;
+      margin: .5rem auto;
 
       div {
-        line-height: 1.1rem;
+        line-height: .9rem;
         width: 70%;
         text-indent: 2em;
         margin: 0 auto;
         @include pos(r);
-        top: .6rem;
+        top: .5rem;
       }
     }
     .zmiti-btn-group {
       @include displayBox(horizontal);
       width: 8rem;
-      margin: 1rem auto;
+      margin: .5rem auto;
 
       &>aside {
         -webkit-box-flex: 1;
@@ -70,5 +72,12 @@
   }
   .zmiti-mask {
     z-index: 1000;
+  }
+}
+@media all and (max-height:612px) and (min-width:412px) {
+  .zmiti-result-main-content {
+    .zmiti-btn-group {
+      margin: .2rem auto !important;
+    }
   }
 }

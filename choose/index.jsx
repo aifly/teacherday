@@ -15,9 +15,12 @@ class ZmitiChooseApp extends Component {
     super(props);
 
     this.state = {
-      fileVal: '', //./assets/images/1.jpg'http://api.zmiti.com/zmiti_ele/public/20170905/13d5f5b828dfc697fced7b7b1baf3458.png',
+      fileVal: '', //.'http://api.zmiti.com/zmiti_ele/public/20170905/13d5f5b828dfc697fced7b7b1baf3458.png',
       className: 'right',
-      border: ''
+      border: '',
+      transX: 0,
+      transY: 0,
+      tip: '点击上传相片'
 
     }
     this.viewW = document.documentElement.clientWidth;
@@ -30,18 +33,29 @@ class ZmitiChooseApp extends Component {
       backgroundSize: 'cover'
     };
     var rem = this.viewW / 10;
+
+    var uploadStyle = {
+      border: this.state.fileVal ? '1px dashed #000' : 'none',
+      boxSizing: 'border-box'
+    }
+    if (this.state.fileVal) {
+      uploadStyle.background = 'url(' + this.state.fileVal + ') no-repeat';
+      uploadStyle.backgroundSize = 'cover';
+      uploadStyle.backgroundPosition = this.state.transX + 'px ' + this.state.transY + 'px';
+    }
     return <div className={'zmiti-choose-main-ui '+this.state.className} style={mainStyle}>
       <div className='zmiti-choose-main-content'>
-        <div className='zmiti-upload'>
-          <img  src={this.state.fileVal||'./assets/images/upload.png'}/>
+        <div className='zmiti-upload' ref='img'>
+          {this.state.fileVal && <div  style={uploadStyle} ></div>}
+          {!this.state.fileVal &&<img  src={'./assets/images/upload.png'}/>}
+          {this.state.fileVal && <img hidden  style={{zIndex:1002,position:'relative',WebkitTransform:'translate('+this.state.transX+'px,'+this.state.transY+'px)'}} src={this.state.fileVal}/>}
           <canvas ref='canvas' width={6*rem}  height={6*rem}></canvas>
           <input ref='upload-file' onChange={this.chooseImg.bind(this)} type='file'/>
 
-          {this.state.showUploadLoading&&<span className='zmiti-upload-loading'>上传中,请稍候...</span>}
+          {<span className='zmiti-upload-loading'>{this.state.tip}</span>}
         </div>
         <div className='zmiti-beign-upload' >
           上传照片
-
         </div>
         <div className='zmiti-btn-groups'>
             <aside onClick={this.rechoose.bind(this)}><img src='./assets/images/rechoose.png'/></aside>
@@ -76,7 +90,8 @@ class ZmitiChooseApp extends Component {
   rechoose() {
     //重新选择图片
     this.setState({
-      fileVal: ''
+      fileVal: '',
+      tip: '点击上传相片'
     }, () => {
       this.drawImage();
     });
@@ -89,7 +104,8 @@ class ZmitiChooseApp extends Component {
     }
     var formData = new FormData();
     this.setState({
-      showUploadLoading: true
+      showUploadLoading: true,
+      tip: '上传中,请稍候...'
     })
 
     formData.append('setupfile', this.refs['upload-file'].files[0]);
@@ -109,8 +125,7 @@ class ZmitiChooseApp extends Component {
           } = this.props;
           this.setState({
             fileVal: data.getfileurl[0].datainfourl,
-            showUploadLoading: false,
-
+            tip: ''
           }, () => {
             this.drawImage()
           });
@@ -150,16 +165,16 @@ class ZmitiChooseApp extends Component {
 
 
     obserable.on('toggleChoose', (e) => {
-      if (e === 'active') {
-        var canvas = this.refs['canvas'];
-        var context = canvas.getContext('2d');
-        var img = new Image();
-        img.onload = function() {
-          context.globalCompositeOperation = 'destination-atop';
-          context.drawImage(this, 0, 0, canvas.width, canvas.height);
-        }
-        img.src = this.state.border;
-      }
+      /* if (e === 'active') {
+         var canvas = this.refs['canvas'];
+         var context = canvas.getContext('2d');
+         var img = new Image();
+         img.onload = function() {
+           context.globalCompositeOperation = 'destination-atop';
+           context.drawImage(this, 0, 0, canvas.width, canvas.height);
+         }
+         img.src = this.state.border;
+       }*/
       this.setState({
         className: e
       })
@@ -167,8 +182,32 @@ class ZmitiChooseApp extends Component {
 
     obserable.on('getFile', () => {
       return this.state.fileVal
+    });
+
+    obserable.on('getPos', () => {
+      return {
+        transX: this.state.transX,
+        transY: this.state.transY
+      }
     })
 
+    $(this.refs['img']).on('touchstart', e => {
+      var e = e.originalEvent.changedTouches[0];
+      var disX = e.pageX - this.state.transX;
+      var disY = e.pageY - this.state.transY;
+
+      $(document).on('touchmove', e => {
+
+        var e = e.originalEvent.changedTouches[0];
+        console.log(e.pageX);
+        this.setState({
+          transX: e.pageX - disX,
+          transY: e.pageY - disY
+        })
+      }).on('touchend', () => {
+        $(document).off('touchend touchmvee')
+      })
+    });
 
   }
 

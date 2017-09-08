@@ -42,12 +42,19 @@
   .zmiti-choose-main-ui .zmiti-choose-main-content {
     width: 9rem; }
     .zmiti-choose-main-ui .zmiti-choose-main-content .zmiti-upload {
-      width: 6rem;
-      height: 6rem;
+      width: 7rem;
+      height: 7rem;
       overflow: hidden;
       text-align: center;
       margin: 0 auto;
       position: relative; }
+      .zmiti-choose-main-ui .zmiti-choose-main-content .zmiti-upload > div {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: 10000; }
       .zmiti-choose-main-ui .zmiti-choose-main-content .zmiti-upload canvas {
         position: absolute;
         z-index: 10;
@@ -72,7 +79,6 @@
         left: 50%;
         top: 50%;
         width: 100%;
-        color: #ff4456;
         font-size: .5rem;
         -webkit-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%); }

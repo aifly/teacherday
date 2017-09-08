@@ -48,7 +48,9 @@ class App extends Component {
 		var data1 = {
 			border: this.state.border,
 			file: this.state.file,
-			wish: this.state.wish
+			wish: this.state.wish,
+			transX: this.state.transX,
+			transY: this.state.transY
 		}
 
 		return <div className='zmiti-main-ui'>
@@ -185,6 +187,8 @@ class App extends Component {
 						var file = s.getQueryString('file');
 						var border = s.getQueryString('border');
 						var wish = s.getQueryString('wish');
+						var transX = s.getQueryString('transX');
+						var transY = s.getQueryString('transY');
 
 						var redirect_uri = window.location.href.split('?')[0];
 
@@ -193,6 +197,8 @@ class App extends Component {
 							redirect_uri = s.changeURLPar(redirect_uri, 'file', (file));
 							redirect_uri = s.changeURLPar(redirect_uri, 'border', (border));
 							redirect_uri = s.changeURLPar(redirect_uri, 'wish', (wish));
+							redirect_uri = s.changeURLPar(redirect_uri, 'transX', (transX));
+							redirect_uri = s.changeURLPar(redirect_uri, 'transY', (transY));
 						}
 
 						//url = s.changeURLPar(url, 'nickname', 'zmiti');
@@ -229,14 +235,18 @@ class App extends Component {
 		var file = s.getQueryString('file');
 		var border = s.getQueryString('border');
 		var wish = s.getQueryString('wish');
+		var transX = s.getQueryString('transX');
+		var transY = s.getQueryString('transY');
 		if (file && border && wish) {
 			this.setState({
 				file,
 				border,
-				wish
+				wish,
+				transX,
+				transY
 			});
 		}
-		this.wxConfig(document.title, document.title, 'http://h5.zmiti.com/public/teacherday/assets/images/300.jpg');
+		this.wxConfig(document.title, window.share.desc, 'http://h5.zmiti.com/public/teacherday/assets/images/300.jpg');
 		this.getOauthurl();
 	}
 	isWeiXin() {
