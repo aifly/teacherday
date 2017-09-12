@@ -57,7 +57,7 @@ class ZmitiChooseApp extends Component {
         <div className='zmiti-beign-upload' >
           上传照片
         </div>
-        <div className='zmiti-btn-groups' style={{width:'4rem'}}>
+        <div className='zmiti-btn-groups'>
             <aside onClick={this.rechoose.bind(this)}><img src='./assets/images/rechoose.png'/></aside>
             <aside onClick={this.next.bind(this)}><img src='./assets/images/next.png'/></aside>
         </div>
